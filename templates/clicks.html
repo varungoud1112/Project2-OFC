@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Click Summary</title>
+  <meta http-equiv="refresh" content="30">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #0f0f0f;
+      color: #eee;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #00eaff;
+    }
+
+    h2, h3 {
+      color: #00bfff;
+      margin-bottom: 5px;
+    }
+
+    summary {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    details {
+      background-color: #141414;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1c1c1c;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #222;
+      color: #00eaff;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:hover {
+      background-color: #292929;
+    }
+
+    #clickTableWrapper {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #333;
+      border-radius: 5px;
+    }
+
+    button, input[type="date"] {
+      padding: 6px 12px;
+      background-color: #333;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 4px;
+      margin: 5px 10px 10px 0;
+      cursor: pointer;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 3px 0;
+    }
+
+    .summary {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        font-size: 14px;
+      }
+
+      button, input[type="date"] {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Click Summary</h1>
+
+  <div class="summary">
+    <strong>Total Unique IPs:</strong> {{ total_unique_ips }}
+  </div>
+
+  <div class="summary">
+    <h2>📅 Unique IPs Count Per Day</h2>
+    <ul>
+      {% for date, count in unique_ip_count_by_date.items() %}
+        <li><strong>{{ date }}</strong>: {{ count }} IPs</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <details open>
+    <summary>📍 Unique IPs by Date</summary>
+    {% for date, ips in unique_ip_by_date.items() %}
+      <h3>{{ date }}</h3>
+      <ul>
+        {% for ip in ips %}
+          <li>
+            {{ ip }}{% if ip == '54.242.61.254' %} <span style="color: #0f0;">(PythonAnywhere)</span>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </details>
+
+  <details>
+    <summary>🌍 Clicks by Location (Date-wise)</summary>
+    {% for date, locs in location_summary.items() %}
+      <h3>{{ date }}</h3>
+      <ul>
+        {% for loc, count in locs.items() %}
+          <li>{{ loc }}: {{ count }}</li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </details>
+
+  <h2>📄 All Clicks</h2>
+  <div>
+    <label for="filterDate">Filter by date:</label>
+    <input type="date" id="filterDate" onchange="filterByDate()" />
+    <button onclick="downloadCSV()">Download CSV</button>
+  </div>
+
+  <div id="clickTableWrapper">
+    <table id="clickTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Timestamp</th>
+          <th>IP</th>
+          <th>City</th>
+          <th>Country</th>
+          <th>Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for click in clicks %}
+          <tr>
+            <td>{{ click.timestamp }}</td>
+            <td>{{ click.ip }}</td>
+            <td>{{ click.city }}</td>
+            <td>{{ click.country }}</td>
+            <td>{{ click.path }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function sortTable(colIndex) {
+      const table = document.getElementById("clickTable");
+      let rows = Array.from(table.rows).slice(1);
+      let sorted = rows.sort((a, b) =>
+        new Date(a.cells[colIndex].innerText) - new Date(b.cells[colIndex].innerText)
+      );
+      for (const row of sorted) {
+        table.tBodies[0].appendChild(row);
+      }
+    }
+
+    function filterByDate() {
+      const inputDate = document.getElementById("filterDate").value;
+      const rows = document.querySelectorAll("#clickTable tbody tr");
+
+      rows.forEach(row => {
+        const dateCell = row.cells[0].innerText.split(',')[0];
+        const formattedDate = new Date(dateCell).toISOString().split('T')[0];
+        row.style.display = formattedDate === inputDate || !inputDate ? "" : "none";
+      });
+
+      // ✅ No sorting logic here (as requested)
+    }
+
+    function downloadCSV() {
+      let csv = "Timestamp,IP,City,Country,Path\n";
+      const rows = document.querySelectorAll("#clickTable tbody tr");
+      rows.forEach(row => {
+        if (row.style.display !== "none") {
+          const cols = Array.from(row.cells).map(td => `"${td.innerText}"`);
+          csv += cols.join(",") + "\n";
+        }
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "clicks.csv";
+      link.click();
+    }
+  </script>
+
+  <div style="margin-top: 20px;">
+    <a href="/admin/live-submissions?key=admin123" target="_blank">📄 View Live Submissions (JSON)</a> |
+    <a href="/admin/download/live-submissions?key=admin123" download>⬇️ Download Live Submissions</a>
+  </div>
+
+</body>
+</html>

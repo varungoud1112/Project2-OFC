@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Form</title>
+
+  <!-- Intl Tel Input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css"/>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Intl Tel Input JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.min.js"></script>
+
+  <style>
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    .form-wrapper {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .promo-banner {
+      background: linear-gradient(to right, #d1e9ff, #c2e0f7);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .promo-banner .banner-content {
+      flex: 2 1 300px;
+    }
+
+    .promo-banner .offer-tag {
+      background: #ff1744;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      display: inline-block;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .promo-banner h2 {
+      font-size: 20px;
+      margin: 0;
+      font-weight: 600;
+      color: #0d1b2a;
+    }
+
+    .promo-banner h2 span {
+      background: #ff6d00;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #fff;
+      margin: 0 6px;
+    }
+
+    .promo-banner p {
+      font-size: 14px;
+      margin: 8px 0 0;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, textarea {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .intl-tel-input {
+      width: 100%;
+    }
+
+    .intl-tel-input input {
+      width: 100%;
+      height: 44px;
+      border-radius: 8px;
+      padding-left: 58px !important;
+    }
+
+    .course-wrapper {
+      position: relative;
+    }
+
+    .dropdown-arrow {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .course-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 150px;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    .course-results div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .course-results div:hover {
+      background: #f0f0f0;
+    }
+
+    .submit-btn {
+      background: linear-gradient(to right, #ff512f, #dd2476);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.95;
+    }
+
+    .terms {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    .terms a {
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    @media screen and (max-width: 500px) {
+      .promo-banner h2 {
+        font-size: 16px;
+      }
+      .promo-banner p {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-wrapper">
+    <div class="promo-banner">
+      <div class="banner-content">
+        <div class="offer-tag">🔥 Exclusive Offer</div>
+        <h2><strong>Get Upto</strong> <span>60% Off</span><strong> on the courses.</strong></h2>
+        <p>Grab it fastly</p>
+      </div>
+    </div>
+
+    <form id="data-form" action="/submit" method="post">
+      <div class="form-group">
+        <input type="text" id="name" name="name" placeholder="Full Name*"  autocomplete="off" required />
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="email" name="email" placeholder="Email*"  autocomplete="off" required />
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="country" name="country" placeholder="Country*"  autocomplete="off" required />
+      </div>
+
+      <div class="form-group">
+        <input id="phone" type="tel" placeholder="Phone Number"  autocomplete="off" />
+        <input type="hidden" id="full-phone" name="phone" />
+      </div>
+
+      <div class="form-group course-wrapper">
+        <input type="text" id="courseInput" name="course" placeholder="Search or Select Course*" autocomplete="off" required />
+        <span class="dropdown-arrow" id="arrowToggle">&#9660;</span>
+        <div class="course-results" id="courseResults"></div>
+      </div>
+
+      <div class="form-group">
+        <textarea id="comment" name="comment" placeholder="Happy to assist – type your question and unlock your coupon" rows="3" style="height: 100px; width: 100%; resize: none;" autocomplete="off"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Let's Get Started</button>
+    </form>
+  </div>
+
+  <script>
+    const courses = ["Certified Scrum Master (CSM®) Certification Training",
+      "Certified Scrum Product Owner (CSPO®) Certification Training",
+      "Advanced Certified Scrum Master (A-CSM®) Certification Training",
+      "Advanced Certified Scrum Product Owner (A-CSPO®) Certification Training",
+      "Certified Scrum Developer (CSD®) Certification Training",
+      "Agile and Scrum Training",
+      "PMI-Agile Certified Practitioner (PMI-ACP®) Certification Training",
+      "Professional Scrum Master™ (PSM I) Certification Training",
+      "Certified Agile Scaling Practitioner 1 (CASP 1) Training",
+      "Agile Coaching Skills - Certified Facilitator (CAF) Training",
+      "Professional Scrum Master™ Advanced (PSM A) Certification Training",
+      "Certified Agile Leader® 1 (CAL 1™) Certification Training",
+      "Advanced-Certified Scrum Developer® (A-CSD) Certification Training",
+      "ICAgile Certified Professional in Agile Coaching (ICP-ACC®) Certification Training",
+      "Professional Scrum with Kanban™ (PSK) Certification Training",
+      "Professional Scrum Product Owner™ I (PSPO) Certification Training",
+      "Professional Scrum Developer (PSD) Certification Training",
+      "Certified Scrum Professional - ScrumMaster (CSP®-SM) Certification Training",
+      "Certified Agile Leader® 2 (CAL 2™) Certification Training",
+      "Professional Scrum Product Owner (PSPO) - Advanced Course",
+      "Scrum@Scale™ Certification Training",
+      "Kanban System Design (KMP I) Certification Training",
+      "Team Kanban Practitioner (TKP) Certification Training",
+      "Professional Agile Leadership Essentials™ (PAL-E) Certification Training",
+      "Behaviour Driven Development (BDD) Training",
+      "Test Driven Development (TDD) Training",
+      "Agile Fundamentals : Including Scrum and Kanban Training",
+      "Manage Agile Projects Using Scrum Training",
+      "Agile for Executives Training",
+      "Agile for Managers Training",
+      "Agile Product Owner Training",
+      "Agile Sales Management Training",
+      "Applying Professional Scrum™ (APS) Certification Training",
+      "Agile Release Planning Training",
+      "Certified Scrum Professional - Product Owner® (CSP-PO) Certification Training",
+      "Agile Project Management Training",
+      "Jira Software Training for Agile Projects",
+      "ICAgile Product Management (ICP-PDM) Certification Training",
+      "Leading SAFe® 6.0 Certification Training",
+      "SAFe® 6.0 Scrum Master (SSM) Certification Training",
+      "SAFe® 6.0 Product Owner/Product Manager (POPM) Certification Training",
+      "SAFe® 6.0 Practice Consultant (SPC) Certification Training",
+      "SAFe® 6.0 Lean Portfolio Management (LPM) Certification Training",
+      "SAFe® 6.0 Architects Certification Training",
+      "SAFe® 6.0 for Teams Certification Training",
+      "Advanced SAFe Practice Consultant (ASPC) Certification Path",
+      "SAFe® 6.0 Release Train Engineer (RTE) Certification Training",
+      "SAFe® 6.0 DevOps Certification Training",
+      "Advanced Facilitator: Conflict & Collaboration Micro-Credential Course",
+      "SAFe® 6.0 Agile Product Management (APM) Certification Training",
+      "SAFe® 5.0 Agile Software Engineering Certification Training",
+      "Advanced Facilitator: Value Stream Mapping Micro-Credential Course",
+      "Achieving Responsible AI with SAFe Micro-credential Course",
+      "Agile HR Explorer (AHRE) Training and Certification",
+      "Advanced Scrum Master Certification Path",
+      "SAFe® for Hardware Certification Training",
+      "Project Management Professional (PMP®) Certification Training",
+      "Project Management Techniques Training",
+      "PRINCE2® Foundation and Practitioner Certification Training",
+      "PRINCE2® Foundation Certification Training",
+      "PRINCE2® Practitioner Certification Training",
+      "Certified Associate in Project Management (CAPM®) Certification Training",
+      "PRINCE2 Agile® Foundation Certification Training",
+      "Primavera P6 v 20.12 certification training",
+      "PRINCE2 Agile® Practitioner Certification Training",
+      "PRINCE2 Agile® Foundation and Practitioner Certification Training",
+      "Program Management Professional (PgMP)® Certification Training",
+      "Project Management Fundamental Training",
+      "Portfolio Management Professional (PfMP®) Certification Training",
+      "Business Case Writing Training",
+      "Conflict Management Training",
+      "Certified Business Analysis Professional (CBAP®) Certification Training",
+      "Change Management Training",
+      "Certification of Capability in Business Analysis™ (CCBA®) Training",
+      "Entry Certificate in Business Analysis™ (ECBA™) Certification Training",
+      "Design Thinking Training",
+      "Agile Analysis Certification (IIBA®-AAC) Certification Training",
+      "Generative AI for Business & IT Leaders & Managers Training",
+      "Generative AI for Business Analysts & Functional IT Consultants Training",
+      "Generative AI for Marketing and Sales Business Users Training",
+      "Generative AI with Python & AWS Training",
+      "AI Copilots for Business Users: Microsoft Copilot, Google Duet AI, AmazonQ",
+      "Generative AI with Python and Azure Training",
+      "Generative AI with Python and GCP Training",
+      "Cloud Fundamentals for Business Managers & Product Managers Training",
+      "Generative AI Architect - Advanced Program Training",
+      "Multi-cloud FinOps: AWS, GCP, Azure",
+      "Introduction to Generative AI Training",
+      "Generative AI in HR Certification Course",
+      "Generative AI for Software Developers Course",
+      "Prompt Engineering Course",
+      "Mastering Generative AI Tools Online",
+      "Generative AI In Retail Certification Course",
+      "Agile Objectives and Key Results (Agile OKRs) MicroCredential Training",
+      "AI for Scrum Masters Micro-credential Course",
+      "AI for Product Owners Micro-credential Training",
+      "Scrum Essentials",
+      "Conflict Management Skills Course",
+      "DevOps Foundation® Certification Training",
+      "Docker and Kubernetes Training",
+      "DevSecOps Foundation℠ Certification Training",
+      "ITIL 4® Foundation Certification Training",
+      "Lean Six Sigma Yellow Belt Training",
+      "Lean Six Sigma Green Belt Training",
+      "Lean Six Sigma Black Belt Training",
+      "Root Cause Analysis (RCA) Training",
+      "Six Sigma Fundamentals Training",
+      "AWS SysOps Administrator Certification Training",
+      "AWS DevOps Engineer Certification Training",
+      "AWS Cloud Practitioner Certification Training",
+      "AWS Certified Solutions Architect Professional Certification Training",
+      "Cloud Computing with AWS Training",
+      "Data Science With Python Training",
+      "Python Django (PD) Training",
+      "Introduction to Artificial Intelligence and Machine Learning (AI and ML) Training",
+      "Artificial Intelligence (AI) Training",
+      "Data Science Training",
+      "Certified Artificial Intelligence For Agile Leaders Training",
+      "Angular JS Training",
+      "React Native Training",
+      "React JS Training",
+      "Introduction to Blockchain Training",
+      "Python for Beginners Training",
+      "Python Programming Training",
+      "PCI DSS Training",
+      "Microsoft AZ-400: Designing and Implementing Microsoft DevOps Solutions Training",
+      "Microsoft Power BI Training",
+      "AZ-104 Microsoft Azure Administrator Training",
+      "Certified Information Systems Security Professional (CISSP®) Training"]; // Your full array of course names (keep as is)
+    const input = document.getElementById("courseInput");
+    const resultsBox = document.getElementById("courseResults");
+    const arrowToggle = document.getElementById("arrowToggle");
+    let dropdownOpen = false;
+
+    function showDropdown(query = "") {
+      resultsBox.innerHTML = "";
+      const filtered = courses.filter(c => c.toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        resultsBox.innerHTML = "<div>No match found</div>";
+      } else {
+        filtered.forEach(course => {
+          const div = document.createElement("div");
+          div.textContent = course;
+          div.addEventListener("click", () => {
+            input.value = course;
+            resultsBox.innerHTML = "";
+            dropdownOpen = false;
+          });
+          resultsBox.appendChild(div);
+        });
+      }
+      dropdownOpen = true;
+    }
+
+    input.addEventListener("input", () => {
+      showDropdown(input.value.toLowerCase());
+    });
+
+    input.addEventListener("focus", () => {
+      if (input.value.trim()) {
+        showDropdown(input.value.toLowerCase());
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!input.contains(e.target) && !resultsBox.contains(e.target) && e.target !== arrowToggle) {
+        resultsBox.innerHTML = "";
+        dropdownOpen = false;
+      }
+    });
+
+    arrowToggle.addEventListener("click", () => {
+      if (dropdownOpen) {
+        resultsBox.innerHTML = "";
+        dropdownOpen = false;
+      } else {
+        input.focus();
+        showDropdown();
+      }
+    });
+
+    const iti = window.intlTelInput(document.querySelector("#phone"), {
+      initialCountry: "in",
+      separateDialCode: true,
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+
+    document.getElementById("data-form").addEventListener("submit", function (e) {
+      const countryCode = iti.getSelectedCountryData().dialCode;
+      const number = document.querySelector("#phone").value.replace(/\D/g, "");
+      document.getElementById("full-phone").value = `+${countryCode}-${number}`;
+    });
+  </script>
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+</body>
+</html>
